@@ -59,6 +59,8 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
 
     log.Info(jsonContent);
 
+    string locatorId = data.locatorId;
+
     if (data.assetId == null)
     {
         // for test
@@ -67,6 +69,12 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
         {
             error = "Please pass asset ID in the input object (assetId)"
         });
+    }
+
+    if (data.locatorId == null)
+    {
+        locatorId = Guid.NewGuid().ToString();
+        log.Warning("No locatorId was provided for publishing the media asset, generating new Guid");
     }
 
     string playerUrl = "";
@@ -101,7 +109,7 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
 
         // publish with a streaming locator (10 years)
         IAccessPolicy readPolicy2 = _context.AccessPolicies.Create("readPolicy", TimeSpan.FromDays(365*10), AccessPermissions.Read);
-        ILocator outputLocator2 = _context.Locators.CreateLocator(LocatorType.OnDemandOrigin, outputAsset, readPolicy2);
+        ILocator outputLocator2 = _context.Locators.CreateLocator(locatorId, LocatorType.OnDemandOrigin, outputAsset, readPolicy2);
 
         var publishurlsmooth = GetValidOnDemandURI(outputAsset);
         var publishurlpath = GetValidOnDemandPath(outputAsset);
