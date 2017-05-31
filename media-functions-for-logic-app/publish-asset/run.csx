@@ -55,11 +55,11 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
         });
     }
 
-    //if (data.locatorId == null)
-    //{
-    //    locatorId = Guid.NewGuid().ToString();
-    //    log.Warning("No locatorId was provided for publishing the media asset, generating new Guid");
-    //}
+    if (data.locatorId == null)
+    {
+        locatorId = Guid.NewGuid().ToString();
+        log.Warning("No locatorId was provided for publishing the media asset, generating new Guid");
+    }
 
     string playerUrl = "";
     string smoothUrl = "";
@@ -93,7 +93,7 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
 
         // publish with a streaming locator (10 years)
         IAccessPolicy readPolicy2 = _context.AccessPolicies.Create("readPolicy", TimeSpan.FromDays(365*10), AccessPermissions.Read);
-        ILocator outputLocator2 = _context.Locators.CreateLocator(locatorId, LocatorType.OnDemandOrigin, outputAsset, readPolicy2);
+        ILocator outputLocator2 = _context.Locators.CreateLocator(locatorId, LocatorType.OnDemandOrigin, outputAsset, readPolicy2, null);
 
         var publishurlsmooth = GetValidOnDemandURI(outputAsset);
         var publishurlpath = GetValidOnDemandPath(outputAsset);
