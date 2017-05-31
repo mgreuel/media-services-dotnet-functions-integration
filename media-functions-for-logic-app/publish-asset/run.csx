@@ -1,19 +1,3 @@
-/*
-This function publishes an asset.
-
-Input:
-{
-    "assetId" : "nb:cid:UUID:2d0d78a2-685a-4b14-9cf0-9afb0bb5dbfc", // Mandatory, Id of the source asset
-}
-
-Output:
-{
-    playerUrl : "", // Url of demo AMP with content
-    smoothUrl : "", // Url for the published asset (contains name.ism/manifest at the end) for dynamic packaging
-    pathUrl : ""    // Url of the asset (path)
-}
-*/
-
 #r "Newtonsoft.Json"
 #r "Microsoft.WindowsAzure.Storage"
 #load "../Shared/mediaServicesHelpers.csx"
@@ -71,11 +55,11 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
         });
     }
 
-    if (data.locatorId == null)
-    {
-        locatorId = Guid.NewGuid().ToString();
-        log.Warning("No locatorId was provided for publishing the media asset, generating new Guid");
-    }
+    //if (data.locatorId == null)
+    //{
+    //    locatorId = Guid.NewGuid().ToString();
+    //    log.Warning("No locatorId was provided for publishing the media asset, generating new Guid");
+    //}
 
     string playerUrl = "";
     string smoothUrl = "";
