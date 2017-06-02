@@ -91,6 +91,10 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
             });
         }
 
+        // The locatorId is unique so it must be removed from the old videoa sset, before it can be used to publish the new video asset
+        ILocator locator = _context.Locators.SingleOrDefault(l => l.Id.IndexOf(locatorId, StringComparison.OrdinalIgnoreCase) >= 0);
+        locator?.Delete();
+
         // publish with a streaming locator (10 years)
         IAccessPolicy readPolicy2 = _context.AccessPolicies.Create("readPolicy", TimeSpan.FromDays(365*10), AccessPermissions.Read);
         ILocator outputLocator2 = _context.Locators.CreateLocator(locatorId, LocatorType.OnDemandOrigin, outputAsset, readPolicy2, null);
