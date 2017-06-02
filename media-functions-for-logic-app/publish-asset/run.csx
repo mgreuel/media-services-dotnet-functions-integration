@@ -92,7 +92,7 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
         }
 
         // The locatorId is unique so it must be removed from the old videoa sset, before it can be used to publish the new video asset
-        ILocator locator = _context.Locators.Where(l => l.Id.IndexOf(locatorId, StringComparison.OrdinalIgnoreCase) >= 0).ToList().SingleOrDefault();
+        ILocator locator = _context.Locators.Where(l => l.Id == locatorId).ToList().SingleOrDefault();
         locator?.Delete();
 
         // publish with a streaming locator (10 years)
